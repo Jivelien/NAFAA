@@ -1,0 +1,41 @@
+<TrainingLayout>:
+    orientation: 'vertical'
+    BoxLayout:
+        size_hint: (1,0.1)
+        canvas.before:
+            Color:
+                rgba: 0,0,1,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Size:" +str(root.size)
+            font_size: self.size[1]
+            color: [1,0,0,1]
+        Label:
+            font_size: self.size[1]
+            color: [0,1,0,1]
+            text: "Strecht: "+str(int(stretchingSlider.value))+" - sleep: "+str(int(sleepSlider.value))
+    BoxLayout:
+        Slider:
+            id: stretchingSlider
+            min: 0
+            max: 120
+            orientation: "horizontal"
+        Slider:
+            id: sleepSlider
+            min: 0
+            max: 30
+            orientation: "horizontal"
+    Label:
+        text: "ici l'image"
+        font_size: root.size[0] * 0.05
+        color: [1,0,0,1]
+    BoxLayout:
+        Button:
+            text:'Start'
+        Label:
+            text: "ici la liste"
+            font_size: root.size[0] * 0.05
+            color: [1,0,0,1]
+        
