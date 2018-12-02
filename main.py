@@ -5,15 +5,18 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
 from kivy.uix.button import Button
-from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.graphics.context_instructions import Color #TMP
 from kivy.graphics.vertex_instructions import Rectangle #TMP
-from kivy.properties import NumericProperty 
+from kivy.properties import NumericProperty, BooleanProperty
 from kivy.clock import Clock
+
+class Parameters(FloatLayout):
+    pass
 
 class TrainingLayout(BoxLayout):
     counter=NumericProperty(0)
+    isParameter=BooleanProperty(False)
 
     def picture_time(self, *args):
         stretchImage = self.ids.stretchImage
@@ -22,6 +25,14 @@ class TrainingLayout(BoxLayout):
             stretchImage.source = ''
             self.clock_event.cancel()
             self.counter=0
+
+    def show_parameters(self, *args):
+        if self.isParameter == False :
+            self.parent.add_widget(Parameters())
+            self.isParameter = True
+        else:
+            self.parent.remove_widget(self.parent.children[0])
+            self.isParameter = False
 
     def start_stretching(self, *args):
         stretchImage = self.ids.stretchImage
@@ -32,25 +43,15 @@ class TrainingLayout(BoxLayout):
         except:
             pass
         self.clock_event = Clock.schedule_interval(self.picture_time, 1)
-    
-    def show_menu(self, *args):
-        popup = Popup(title='Test popup',
-        content=Label(text='Hello world'),
-        size_hint=(None, None), size=(400, 400))
-        popup.open()
 
 class TopBar(BoxLayout):
-    def show_menu(self, *args):
-        popup = Popup(content=Parameters(),
-                            title_size='0sp',
-                            size_hint=(None, None),
-                            size=(400, 400))
-
-        popup.open()
+    pass
 
 class PictureBox(BoxLayout):
     pass
 class SeriesBox(BoxLayout):
+    pass
+class ActionBox(BoxLayout):
     pass
 class Parameters(BoxLayout):
     pass
@@ -61,6 +62,6 @@ class TrainingApp(App):
 
 if __name__ == '__main__':
     Window.clearcolor = (1, 1, 1, 1)
-    Window.size=(571,1016)
+    Window.size=(428,762)
 
     TrainingApp().run()

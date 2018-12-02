@@ -1,7 +1,10 @@
+
 # NAFAA
+
 Never A FatAss Again
 
 ## Test list:
+
 * When you click on start button, a picture appears : ok 
 * Picture stay on screen for a defined time in seconds : ok
 * When you click on the start button, the label become 'pause'

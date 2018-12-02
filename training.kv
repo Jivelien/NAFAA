@@ -1,18 +1,11 @@
 <TopBar>:
-    size_hint_y: None
-    size_y: 100
+    size_hint_y: 0.15
     canvas:
         Color:
             rgba: (0, 1, 1, 1)
         Rectangle:
             size: self.size
             pos: self.pos
-    ActionBar:
-        ActionPrevious:
-        ActionView:
-            ActionButton:
-                text: "Button 1"
-                on_release: app.button1()
 <PictureBox>:
     canvas.before:
         Color:
@@ -20,7 +13,6 @@
         Rectangle:
             size: self.size
             pos: self.pos
-
 <SeriesBox>:
     size_hint_y: 0.25
     canvas:
@@ -29,36 +21,50 @@
         Rectangle:
             size: self.size
             pos: self.pos
-
-<Parameters>:
-    size_hint: 1, 1
+<ActionBox>:
+    size_hint_y: 0.25
     canvas:
         Color:
-            rgba: (0, 1, 1, 1)
+            rgba: (1, 0, 1, 1)
         Rectangle:
             size: self.size
             pos: self.pos
-    Slider:
-    Slider:
-        
+
+<Parameters>:
+    size_hint_y: 0.5
+    pos: (0,root.size[1]-int(root.size[1]*0.18))
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: (1, 0.5, 1, 0.5)
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        orientation: 'vertical'
+        Slider:
+        Slider:
 
 <TrainingLayout>:
     orientation: 'vertical'
     TopBar:
+        id: topbar
         Label:
+            text: "Etirement"
+            font_size: self.height
+            halign: 'center'
+            valign: 'middle'
         Button:
-            text: 'START'
+            text: 'Setting'
             width: self.height
             size_hint_x: None
-            on_release: self.parent.show_menu()
-
+            on_press: root.show_parameters()
     PictureBox:
         id:pictureBox
         Image:
             id:stretchImage
             source: self.source
-
     SeriesBox:
+    ActionBox:
         Button:
             text: 'START'
             width: self.height
