@@ -17,14 +17,28 @@ class Parameters(FloatLayout):
 class TrainingLayout(BoxLayout):
     counter=NumericProperty(0)
     isParameter=BooleanProperty(False)
+    isPause=BooleanProperty(True)
+    isRunning=BooleanProperty(False)
+
+    def start_stretching(self, *args):
+        self.isPause = not self.isPause
+        if not self.isRunning:
+            self.clock_event = Clock.schedule_interval(self.picture_time, 1)
+            self.isRunning=True
 
     def picture_time(self, *args):
         stretchImage = self.ids.stretchImage
-        self.counter+=1
+        stretchImage.source = './img/A.jpg'
+
+        print(self.counter)
         if self.counter==5:
             stretchImage.source = ''
             self.clock_event.cancel()
             self.counter=0
+            self.isPause= True
+            self.isRunning=False
+        if not self.isPause:
+            self.counter+=1
 
     def show_parameters(self, *args):
         if self.isParameter == False :
@@ -34,15 +48,7 @@ class TrainingLayout(BoxLayout):
             self.parent.remove_widget(self.parent.children[0])
             self.isParameter = False
 
-    def start_stretching(self, *args):
-        stretchImage = self.ids.stretchImage
-        stretchImage.source = './img/A.jpg'
-        try:
-            self.clock_event.cancel()
-            self.counter=0
-        except:
-            pass
-        self.clock_event = Clock.schedule_interval(self.picture_time, 1)
+    
 
 class TopBar(BoxLayout):
     pass

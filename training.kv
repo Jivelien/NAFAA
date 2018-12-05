@@ -66,7 +66,8 @@
     SeriesBox:
     ActionBox:
         Button:
-            text: 'START'
+            id: startButton
+            text: 'START' if root.isPause else 'PAUSE'
             width: self.height
             size_hint_x: None
             on_press: root.start_stretching()
