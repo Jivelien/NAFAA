@@ -8,8 +8,9 @@ from kivy.uix.button import Button
 from kivy.core.window import Window
 from kivy.graphics.context_instructions import Color #TMP
 from kivy.graphics.vertex_instructions import Rectangle #TMP
-from kivy.properties import NumericProperty, BooleanProperty
+from kivy.properties import NumericProperty, BooleanProperty, ListProperty
 from kivy.clock import Clock
+from random import random
 
 class Parameters(FloatLayout):
     pass
@@ -19,6 +20,8 @@ class TrainingLayout(BoxLayout):
     isParameter=BooleanProperty(False)
     isPause=BooleanProperty(True)
     isRunning=BooleanProperty(False)
+    pictureList=ListProperty({'A','B','C','D','E','F','G'})
+    currentPictureId=NumericProperty(0)
 
     def start_stretching(self, *args):
         self.isPause = not self.isPause
@@ -28,15 +31,18 @@ class TrainingLayout(BoxLayout):
 
     def picture_time(self, *args):
         stretchImage = self.ids.stretchImage
-        stretchImage.source = './img/A.jpg'
-
-        print(self.counter)
-        if self.counter==5:
+        stretchImage.source = './img/'+self.pictureList[self.currentPictureId]+'.jpg'
+        print(self.currentPictureId)
+        #print(self.counter)
+        if self.counter==2 and self.currentPictureId==6:
             stretchImage.source = ''
             self.clock_event.cancel()
             self.counter=0
             self.isPause= True
             self.isRunning=False
+        elif self.counter==2:
+            self.currentPictureId+=1
+            self.counter=0
         if not self.isPause:
             self.counter+=1
 
