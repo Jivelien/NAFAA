@@ -1,79 +1,57 @@
-from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.label import Label
-from kivy.uix.slider import Slider
-from kivy.uix.button import Button
-from kivy.core.window import Window
-from kivy.graphics.context_instructions import Color #TMP
-from kivy.graphics.vertex_instructions import Rectangle #TMP
-from kivy.properties import NumericProperty, BooleanProperty, ListProperty
-from kivy.clock import Clock
-from random import random
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jul 15 15:03:10 2019
 
-class Parameters(FloatLayout):
-    pass
+@author: jude
+"""
+import glob
+import cv2
+from time import time
 
-class TrainingLayout(BoxLayout):
-    counter=NumericProperty(0)
-    isParameter=BooleanProperty(False)
-    isPause=BooleanProperty(True)
-    isRunning=BooleanProperty(False)
-    pictureList=ListProperty({'A','B','C','D','E','F','G'})
-    currentPictureId=NumericProperty(0)
+MAIN_PATH = '/home/jude/Documents/artem/dev/NAFAA/'
+SOUPLESSE_PIC_PATH = MAIN_PATH + 'Souplesse/'
 
-    def start_stretching(self, *args):
-        self.isPause = not self.isPause
-        if not self.isRunning:
-            self.clock_event = Clock.schedule_interval(self.picture_time, 1)
-            self.isRunning=True
+WINDOWS_NAME = 'souplesse'
+STRECH_TIME = 5
 
-    def picture_time(self, *args):
-        stretchImage = self.ids.stretchImage
-        stretchImage.source = './img/'+self.pictureList[self.currentPictureId]+'.jpg'
-        print(self.currentPictureId)
-        #print(self.counter)
-        if self.counter==2 and self.currentPictureId==6:
-            stretchImage.source = ''
-            self.clock_event.cancel()
-            self.counter=0
-            self.isPause= True
-            self.isRunning=False
-        elif self.counter==2:
-            self.currentPictureId+=1
-            self.counter=0
-        if not self.isPause:
-            self.counter+=1
+img_list = glob.glob(SOUPLESSE_PIC_PATH+'*.JPG')
 
-    def show_parameters(self, *args):
-        if self.isParameter == False :
-            self.parent.add_widget(Parameters())
-            self.isParameter = True
-        else:
-            self.parent.remove_widget(self.parent.children[0])
-            self.isParameter = False
+img = cv2.imread(img_list[0])
 
+cv2.namedWindow(WINDOWS_NAME)
+
+i = 0
+t = time()
+pause = False
+streching = False
+
+while True:
+    img = cv2.imread(img_list[i])
+    if not pause: timer = int(time() - t)
+
+    if timer > STRECH_TIME:
+        t = time()
+        if i < len(img_list) - 1 : 
+            i += 1
+        
+    cv2.putText(img, str(timer), (10,75), cv2.FONT_HERSHEY_SIMPLEX, 3, (0,0,0), 5)        
+    cv2.imshow(WINDOWS_NAME,img)
     
+    K = cv2.waitKey(1) & 0xFF
+    if K == ord('q'):
+        cv2.destroyAllWindows()
+        break
+    elif K == ord('n'):
+        if i < len(img_list) - 1 : 
+            i += 1
+            t = time()
+    elif K == ord('b'):
+        if i > 0 : 
+            i -= 1
+            t = time()
+    elif K == ord('p'):
+        pause = not pause
+        t = time() - timer
 
-class TopBar(BoxLayout):
-    pass
 
-class PictureBox(BoxLayout):
-    pass
-class SeriesBox(BoxLayout):
-    pass
-class ActionBox(BoxLayout):
-    pass
-class Parameters(BoxLayout):
-    pass
-
-class TrainingApp(App):
-    def build(self):
-        return TrainingLayout()
-
-if __name__ == '__main__':
-    Window.clearcolor = (1, 1, 1, 1)
-    Window.size=(428,762)
-
-    TrainingApp().run()

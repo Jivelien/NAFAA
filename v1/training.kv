@@ -64,6 +64,8 @@
             id:stretchImage
             source: self.source
     SeriesBox:
+        Label:
+            text:str(root.currentPictureId +1)+'/'+str(len(root.pictureList))
     ActionBox:
         Button:
             id: startButton
@@ -71,3 +73,5 @@
             width: self.height
             size_hint_x: None
             on_press: root.start_stretching()
+        Label:
+            text: str(root.counter)+'/'+str(root.strechDuration)
