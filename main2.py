@@ -12,6 +12,8 @@ class app(tk.Tk):
         super().__init__()
         
         self.config = json.load(open('config.json','r'))
+        self.timer_time = self.config['timer']
+        self.rest_time = self.config['rest']
         
         # Initialize GUI
         self.title("Stretching trainer")
@@ -37,6 +39,18 @@ class app(tk.Tk):
         self.config['up'] = self.up_radio_bool.get()
         self.config['mid'] = self.middle_radio_bool.get()
         self.config['bot'] = self.down_radio_bool.get()
+        with open('config.json','w') as config_file:
+            json.dump(self.config, config_file)
+    
+    def click_slide_time(self, value):
+        self.timer_time = value
+        self.config['timer'] = self.timer_time
+        with open('config.json','w') as config_file:
+            json.dump(self.config, config_file)
+    
+    def click_slide_rest(self, value):
+        self.rest_time = value
+        self.config['rest'] = self.rest_time
         with open('config.json','w') as config_file:
             json.dump(self.config, config_file)
     
@@ -102,13 +116,15 @@ class app(tk.Tk):
         self.paramframe = tk.LabelFrame(self.configframe, text='Paramètres', font = 15, borderwidth=2, padx = 20, pady = 10,  relief=tk.GROOVE)
         
         tk.Label(self.paramframe, text="Durée de l'exercice", anchor = 'nw', font = 15).pack(fill = tk.X)
-        self.timer_scale = tk.Scale(self.paramframe,orient='horizontal', from_=0, to=120, command = print)
+        self.timer_scale = tk.Scale(self.paramframe,orient='horizontal', from_=0, to=120, command = self.click_slide_time)
+        self.timer_scale.set(self.timer_time)
         self.timer_scale.pack(fill = tk.X)
         
         tk.Label(self.paramframe).pack()
         
         tk.Label(self.paramframe, text="Durée du repos", anchor = 'nw', font = 15).pack(fill = tk.X)
-        self.rest_scale = tk.Scale(self.paramframe,orient='horizontal', from_=0, to=30, command = print)
+        self.rest_scale = tk.Scale(self.paramframe,orient='horizontal', from_=0, to=30, command = self.click_slide_rest)
+        self.rest_scale.set(self.rest_time)
         self.rest_scale.pack(fill = tk.X)
 
     def _init_partframe(self):
