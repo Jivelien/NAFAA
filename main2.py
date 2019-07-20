@@ -1,7 +1,7 @@
 import tkinter as tk
 from glob import glob
 import json
-from PIL import Image,ImageTk  
+
 
 MAIN_PATH = '/home/jude/Documents/artem/dev/NAFAA/'
 SOUPLESSE_PIC_PATH = MAIN_PATH + 'Souplesse/'
@@ -12,17 +12,21 @@ class app(tk.Tk):
         super().__init__()
         
         self.config = json.load(open('config.json','r'))
-        self.timer_time = self.config['timer']
+        self.streching_time = self.config['timer']
         self.rest_time = self.config['rest']
         
+        self.exercice_timer = 0
+        self.full_exercice_timer = 0
+        self.rest_timer = 0
+                
         # Initialize GUI
         self.title("Stretching trainer")
         self.geometry("%sx%s" % (int(self.winfo_screenwidth()/1.9), int(self.winfo_screenheight()/1.9)))
         self.resizable(False, False)
         self._init_mainframe()
             
-        
         self.img_list = self.get_image_list()
+        self.define_global_time()
         
     def get_image_list(self):
         img_list= []
@@ -41,18 +45,43 @@ class app(tk.Tk):
         self.config['bot'] = self.down_radio_bool.get()
         with open('config.json','w') as config_file:
             json.dump(self.config, config_file)
+        self.define_global_time()
     
     def click_slide_time(self, value):
-        self.timer_time = value
-        self.config['timer'] = self.timer_time
+        self.streching_time = value
+        self.config['timer'] = self.streching_time
         with open('config.json','w') as config_file:
             json.dump(self.config, config_file)
+        self.define_global_time()
     
     def click_slide_rest(self, value):
         self.rest_time = value
         self.config['rest'] = self.rest_time
         with open('config.json','w') as config_file:
             json.dump(self.config, config_file)
+        self.define_global_time()
+    
+    def get_strech_timer(self, ref):
+        return str("%02d / %02d" % (int(self.exercice_timer), int(ref)))
+    
+    def define_strech_time(self, ref):
+        self.exercice_time_timer['text'] = self.get_strech_timer(ref)
+    
+    def compute_global_time(self):
+        pic_nb = len(self.img_list)
+        time = int(self.streching_time) * int(pic_nb) + int(self.rest_time) * (int(pic_nb))
+        return time
+
+    def get_global_time(self):
+        ref = self.compute_global_time()
+        ex_min = self.full_exercice_timer //60
+        ex_sec = self.full_exercice_timer % 60
+        ref_min = ref//60
+        ref_sec = ref%60
+        return str("%02d:%02d / %02d:%02d" % (int(ex_min), int(ex_sec), int(ref_min), int(ref_sec)))
+    
+    def define_global_time(self):
+        self.global_time_timer['text'] = self.get_global_time()    
     
     def _init_mainframe(self):
         self.mainframe = tk.Frame(self, bg='white')
@@ -90,12 +119,12 @@ class app(tk.Tk):
         self.pictureframe = tk.Frame(self.mainframe, borderwidth=1, padx = 20,pady = 20, relief=tk.GROOVE)
 #        self.image = Image.open("/home/jude/Documents/artem/dev/NAFAA/Souplesse/B002.JPG") 
 #        photo = ImageTk.PhotoImage(self.image)  
-        self.canva = tk.Label(self.pictureframe)#, image=photo)  
+        self.canva = tk.Label(self.pictureframe, image=photo)  
         self.canva.pack(side='top', fill='both', expand='yes')  
         
     def _init_timeframe(self):
         self.timeframe = tk.Frame(self.mainframe, borderwidth=1, padx = 20, pady=50,relief=tk.GROOVE)
-        led_size = int(self.timeframe.winfo_width())
+        led_size = int(self.winfo_screenwidth()*0.05)
         self.led_canva = tk.Canvas(self.timeframe, height = led_size, width = led_size)
         self.led_canva.create_oval(5, 5, led_size-5, led_size-5, fill="red", width = 0)
         self.led_canva.pack()
@@ -103,13 +132,13 @@ class app(tk.Tk):
         tk.Label(self.timeframe).pack()
         
         tk.Label(self.timeframe, text="Durée :", font = ("Helvetica", 32)).pack(fill = tk.X)
-        self.exercice_time_timer = tk.Label(self.timeframe, text=".... / ....", font = ("Helvetica", 28))
+        self.exercice_time_timer = tk.Label(self.timeframe, text="... / ...", font = ("Helvetica", 28))
         self.exercice_time_timer.pack(fill = tk.X)
   
         tk.Label(self.timeframe).pack()
   
         tk.Label(self.timeframe, text="Durée Totale :", font = ("Helvetica", 20)).pack(fill = tk.X)        
-        self.global_time_timer = tk.Label(self.timeframe, text="..:..:../..:..:..", font = ("Helvetica", 15))
+        self.global_time_timer = tk.Label(self.timeframe, text="..:..:.. / ..:..:..", font = ("Helvetica", 15))
         self.global_time_timer.pack(fill = tk.X)
         
     def _init_paramframe(self):
@@ -117,7 +146,7 @@ class app(tk.Tk):
         
         tk.Label(self.paramframe, text="Durée de l'exercice", anchor = 'nw', font = 15).pack(fill = tk.X)
         self.timer_scale = tk.Scale(self.paramframe,orient='horizontal', from_=0, to=120, command = self.click_slide_time)
-        self.timer_scale.set(self.timer_time)
+        self.timer_scale.set(self.streching_time)
         self.timer_scale.pack(fill = tk.X)
         
         tk.Label(self.paramframe).pack()
@@ -154,8 +183,5 @@ class app(tk.Tk):
         self.stop_btn = tk.Button(self.buttonframe, text = 'STOP', font = 20, state = "disabled")
         self.stop_btn.pack(fill='both', expand=True)
 
-
-app().mainloop()
-
-
-#======================================================
+if __name__ == '__main__':
+    app().mainloop()
