@@ -67,6 +67,11 @@ class app(tk.Tk):
             self.runner()
 
     def click_next_button(self):
+        if self.isrest: 
+            self.full_timer += int(self.rest_time) - int(self.curr_timer)
+            self.full_timer += int(self.streching_time)
+        else:
+            self.full_timer += int(self.streching_time) - int(self.curr_timer)
         self.isrest = True
         self.curr_timer = 0
         if len(self.img_list) - 1 == self.pic_index:
