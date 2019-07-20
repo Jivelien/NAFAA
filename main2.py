@@ -4,6 +4,9 @@ from glob import glob
 import json
 from PIL import Image, ImageTk
 
+import threading
+import time
+
 MAIN_PATH = '/home/jude/Documents/artem/dev/NAFAA/'
 SOUPLESSE_PIC_PATH = MAIN_PATH + 'Souplesse/'
 RATIO = 1.9
@@ -13,8 +16,8 @@ class app(tk.Tk):
         super().__init__()
 
         self.config = json.load(open('config.json','r'))
-        self.streching_time = self.config['timer']
-        self.rest_time = self.config['rest']
+        self.streching_time = int(self.config['timer'])
+        self.rest_time = int(self.config['rest'])
 
         self._init_var()
         
@@ -27,10 +30,48 @@ class app(tk.Tk):
         self.img_list = self.get_image_list()
         self.define_global_time()
 
+    def runner(self):
+        if self.isrunning:
+            if self.isrest and int(self.curr_timer) == int(self.rest_time):
+                self.isrest = False
+                self.curr_timer = 0
+            elif not self.isrest and int(self.curr_timer) == int(self.streching_time):
+                self.isrest = True
+                self.curr_timer = 0
+                if len(self.img_list) - 1 == self.pic_index:
+                    self.click_stop_button()
+                else:
+                    self.pic_index += 1
+                
+            if self.isrest:
+                self.get_picture()
+                self.define_global_time()
+                self.define_strech_time(self.rest_time)
+                self.draw_led('red')
+            else:
+                self.get_picture()
+                self.define_global_time()
+                self.define_strech_time(self.streching_time)
+                self.draw_led('green')    
+            
+            if not self.ispause:
+                self.curr_timer += 1
+                self.full_timer += 1
+            
+            time.sleep(1)
+            self.runner()
+
+    def click_next_button(self):
+        self.isrest = True
+        self.curr_timer = 0
+        if len(self.img_list) - 1 == self.pic_index:
+            self.click_stop_button()
+        else:
+            self.pic_index += 1
+            
     def _init_var(self):
-        self.curr_exercice_timer = 0
-        self.full_exercice_timer = 0
-        self.rest_timer = 0
+        self.curr_timer = 0
+        self.full_timer = 0
         self.pic_index = 0
         
         self.isrunning = False
@@ -39,6 +80,7 @@ class app(tk.Tk):
         
     def lets_start(self):
         self.stop_btn.config(state='normal')
+        self.next_btn.config(state='normal')
         self.timer_scale.config(state='disabled')
         self.rest_scale.config(state='disabled')
         self.up_radio.config(state='disabled')
@@ -55,6 +97,7 @@ class app(tk.Tk):
     def click_start_button(self):
         if not self.isrunning: 
             self.lets_start()
+            self.run = threading.Thread(target = self.runner, name = 'runner').start()
         else: self.ispause = not self.ispause
         if self.ispause: 
             self.start_pause_btn.config(text = 'PAUSE')
@@ -65,6 +108,7 @@ class app(tk.Tk):
         self.isrunning = False
         self.ispause = False
         self.stop_btn.config(state='disabled')
+        self.next_btn.config(state='disabled')
         
         self.timer_scale.config(state='normal')
         self.rest_scale.config(state='normal')
@@ -72,7 +116,7 @@ class app(tk.Tk):
         self.middle_radio.config(state='normal')
         self.bot_radio.config(state='normal')
         self.start_pause_btn.config(text = 'START')
-        
+        self.img_canva.delete("all")
         self._init_var()
     
     def get_image_list(self):
@@ -109,7 +153,7 @@ class app(tk.Tk):
         self.define_global_time()
 
     def get_strech_timer(self, ref):
-        return str("%02d / %02d" % (int(self.exercice_timer), int(ref)))
+        return str("%02d / %02d" % (int(self.curr_timer), int(ref)))
 
     def define_strech_time(self, ref):
         self.exercice_time_timer['text'] = self.get_strech_timer(ref)
@@ -121,8 +165,8 @@ class app(tk.Tk):
 
     def get_global_time(self):
         ref = self.compute_global_time()
-        ex_min = self.full_exercice_timer //60
-        ex_sec = self.full_exercice_timer % 60
+        ex_min = self.full_timer //60
+        ex_sec = self.full_timer % 60
         ref_min = ref//60
         ref_sec = ref%60
         return str("%02d:%02d / %02d:%02d" % (int(ex_min), int(ex_sec), int(ref_min), int(ref_sec)))
@@ -166,14 +210,17 @@ class app(tk.Tk):
         self.pictureframe = tk.Frame(self.mainframe, borderwidth=0)
         self.img_canva = tk.Canvas(self.pictureframe, bg='white', width = 456, height = 567)
         self.img_canva.pack()
+    
+    def draw_led(self, color):
+        led_size = int(self.winfo_screenwidth()*0.05)
+        self.led_canva.create_oval(5, 5, led_size-5, led_size-5, fill=color, width = 0)
         
     def _init_timeframe(self):
         self.timeframe = tk.Frame(self.mainframe, borderwidth=1, padx = 20, pady=50,relief=tk.GROOVE)
         led_size = int(self.winfo_screenwidth()*0.05)
         self.led_canva = tk.Canvas(self.timeframe, height = led_size, width = led_size)
-        self.led_canva.create_oval(5, 5, led_size-5, led_size-5, fill="red", width = 0)
         self.led_canva.pack()
-
+        self.draw_led('red')
         tk.Label(self.timeframe).pack()
 
         tk.Label(self.timeframe, text="Durée :", font = ("Helvetica", 32)).pack(fill = tk.X)
@@ -224,6 +271,9 @@ class app(tk.Tk):
 
         self.start_pause_btn = tk.Button(self.buttonframe, text = 'START', font = 20, command = self.click_start_button)
         self.start_pause_btn.pack(fill='both', expand=True)
+        
+        self.next_btn = tk.Button(self.buttonframe, text = 'NEXT', font = 20, state = "disabled", command = self.click_next_button)
+        self.next_btn.pack(fill='both', expand=True)
 
         self.stop_btn = tk.Button(self.buttonframe, text = 'STOP', font = 20, state = "disabled", command = self.click_stop_button)
         self.stop_btn.pack(fill='both', expand=True)
