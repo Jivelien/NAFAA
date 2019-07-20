@@ -6,9 +6,11 @@ from PIL import Image, ImageTk
 
 import threading
 import time
+from playsound import playsound
 
 MAIN_PATH = '/home/jude/Documents/artem/dev/NAFAA/'
-SOUPLESSE_PIC_PATH = MAIN_PATH + 'Souplesse/'
+SOUPLESSE_PIC_PATH = MAIN_PATH + 'souplesse/'
+SOUND_PATH = MAIN_PATH + 'son/'
 RATIO = 1.9
 
 class app(tk.Tk):
@@ -36,9 +38,11 @@ class app(tk.Tk):
             if self.isrest and int(self.curr_timer) == int(self.rest_time):
                 self.isrest = False
                 self.curr_timer = 0
+                threading.Thread(target = playsound, args=[SOUND_PATH+'start.wav']).start()
             elif not self.isrest and int(self.curr_timer) == int(self.streching_time):
                 self.isrest = True
                 self.curr_timer = 0
+                threading.Thread(target = playsound, args=[SOUND_PATH+'end.wav']).start()
                 if len(self.img_list) - 1 == self.pic_index:
                     self.click_stop_button()
                 else:
