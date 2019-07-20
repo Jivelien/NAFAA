@@ -1,1 +1,1 @@
-{"timer": "30", "rest": "5", "up": true, "mid": false, "bot": false}
+{"timer": "25", "rest": "5", "up": true, "mid": true, "bot": true}
