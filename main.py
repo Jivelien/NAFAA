@@ -110,9 +110,9 @@ class app(tk.Tk):
             self.run = threading.Thread(target = self.runner, name = 'runner').start()
         else: self.ispause = not self.ispause
         if self.ispause: 
-            self.start_pause_btn.config(text = 'PAUSE')
-        else:
             self.start_pause_btn.config(text = 'CONTINUE')
+        else:
+            self.start_pause_btn.config(text = 'PAUSE')
         
     def click_stop_button(self):
         self.isrunning = False
