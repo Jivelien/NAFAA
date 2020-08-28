@@ -8,10 +8,10 @@ import threading
 import time
 from playsound import playsound
 
-MAIN_PATH = '/home/jude/Documents/artem/dev/NAFAA/'
+MAIN_PATH = '/home/jude/Documents/Dev/NAFAA/'
 SOUPLESSE_PIC_PATH = MAIN_PATH + 'souplesse/'
 SOUND_PATH = MAIN_PATH + 'son/'
-RATIO = 1.9
+RATIO = 3
 
 class app(tk.Tk):
     def __init__(self):
