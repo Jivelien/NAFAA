@@ -1,6 +1,5 @@
 import json
 import threading
-import time
 
 STATE_STOP = 0
 STATE_RUNNING = 1
@@ -18,6 +17,7 @@ class TrainingDaemon:
         self.current_program = 'Etirement'
         self.current_step = 0
         self.current_time = 0
+        self.exercice_side = 0
 
         self.start()
 
@@ -36,16 +36,19 @@ class TrainingDaemon:
         exercise_pic = exercise.get('pic')
         exercise_both_side = exercise.get('both_side')
 
-        print(f"{'RUNNING' if self.state else 'NOT RUNNING'} - {self.current_time}/{time_step} -{exercice_name} - {exercise_pic}")
+        print(f"{'RUNNING' if self.state else 'NOT RUNNING'} -[{self.exercice_side}] {self.current_time}/{time_step} -{exercice_name} - {exercise_pic}")
         if self.state :
             self.current_time +=1
             if self.current_time == time_step:
                 self.current_time = 0
-                self.current_step += 1
+                if exercise_both_side and self.exercice_side == 0:
+                    self.exercice_side = 1
+                else:
+                    self.current_step += 1
                 if self.current_step >= len(program):
                     self.state = STATE_STOP
                     self.current_step = 0
-        print(time.time())
+                    self.exercice_side = 0
         if self.timer != None: self.start()
 
     def start(self):
