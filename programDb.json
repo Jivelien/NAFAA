@@ -1,0 +1,16 @@
+{
+    "Etirement": [
+        {
+            "exercise": "Arm up",
+            "time": 30
+        },
+        {
+            "exercise": "Rest",
+            "time": 10
+        },
+        {
+            "exercise": "Arm behind",
+            "time": 30
+        }
+    ]
+}

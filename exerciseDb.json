@@ -1,0 +1,20 @@
+{
+    "Rest": {
+    },
+    "Arm up": {
+        "pic": "./ExercicePic/A001.jpg",
+        "both_side": false
+    },
+    "Arm up2": {
+        "pic": "./ExercicePic/A002.jpg",
+        "both_side": false
+    },
+    "Arm behind": {
+        "pic": "./ExercicePic/A003.jpg",
+        "both_side": true
+    },
+    "Arm behind 2": {
+        "pic": "./ExercicePic/A005.jpg",
+        "both_side": false
+    }
+}
