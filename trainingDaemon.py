@@ -1,10 +1,11 @@
 import json
 import threading
+from program import Program
 from time import time, sleep
 
 STATE_STOP = 0
 STATE_RUNNING = 1
-STATE_PAUSE = 0
+STATE_PAUSE = 2
 
 
 class TrainingDaemon:
@@ -17,13 +18,40 @@ class TrainingDaemon:
         self.program_list = self._read_json_db('programDb.json')
         self.exercise_list = self._read_json_db('exerciseDb.json')
 
-        self.current_program = 'Etirement'
+        self.current_program = None
+        self.current_exercise = None
         self.current_step = 0
         self.current_time = 0
         self.exercice_side = 0
-        self.current_exercise = None
 
         self.start()
+
+    def set_program(self, program_name):
+        program_definition = self.program_list.get(program_name)
+        self.current_program = Program(program_definition)
+        self.current_step = 0
+        self.current_time = 0
+        self.exercice_side = 0
+        self.state = STATE_STOP
+        self.set_exercice()
+
+    def set_exercice(self):
+        self.current_exercise = self.current_program.steps[self.current_step]
+
+    def set_state_stop(self):
+        self.current_step = 0
+        self.current_time = 0
+        self.exercice_side = 0
+        self.state = STATE_STOP
+
+    def set_state_pause(self):
+        self.state = STATE_PAUSE
+
+    def set_state_running(self):
+        if self.current_program is not None:
+            self.state = STATE_RUNNING
+        else:
+            self.state = STATE_STOP
 
     def _read_json_db(self, pathname):
         with open(pathname, 'r') as myfile:
@@ -32,29 +60,26 @@ class TrainingDaemon:
 
     def run(self):
         while True:
-            program = self.program_list.get(self.current_program)
-            step = program[self.current_step]
-            exercice_name = step.get('exercise')
-            time_step = step.get('time')
-            self.current_exercise = self.exercise_list.get(exercice_name)
-            exercise_pic = self.current_exercise.get('pic')
-            exercise_both_side = self.current_exercise.get('both_side')
-
+            if self.current_program is None:
+                sleep(self._delay)
+                if self._debug:
+                    print(f"{time()} - No programm")
+                continue
             if self._debug:
                 print(
-                    f"{time()} - {'RUNNING' if self.state else 'NOT RUNNING'} -[{self.exercice_side}] {self.current_time}/{time_step} -{exercice_name} - {exercise_pic}")
-            if self.state:
+                    f"{time()} - {'RUNNING' if self.state else 'NOT RUNNING'} -[{self.current_exercise.exercice.name}] {self.current_time}/{self.current_exercise.time} -{self.current_exercise.exercice.name} - {self.current_exercise.exercice.picture_path}")
+            if self.state == STATE_RUNNING:
                 self.current_time += self._delay
-                if self.current_time >= time_step:
+                if self.current_time >= self.current_exercise.time:
                     self.current_time = 0
-                    if exercise_both_side and self.exercice_side == 0:
+                    if self.current_exercise.exercise.is_both_side and self.exercice_side == 0:
                         self.exercice_side = 1
                     else:
                         self.current_step += 1
-                    if self.current_step >= len(program):
-                        #self.state = STATE_STOP
-                        self.current_step = 0
-                        self.exercice_side = 0
+                        self.set_exercice()
+                    if self.current_step >= len(self.current_program.steps):
+                        self.set_state_stop()
+
             sleep(self._delay)
 
     def start(self):
