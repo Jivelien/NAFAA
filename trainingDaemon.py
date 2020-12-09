@@ -5,7 +5,7 @@ from time import time, sleep
 
 STATE_STOP = 0
 STATE_RUNNING = 1
-STATE_PAUSE = 2
+STATE_PAUSE = 0
 
 
 class TrainingDaemon:
@@ -42,6 +42,8 @@ class TrainingDaemon:
         self.current_step = 0
         self.current_time = 0
         self.exercice_side = 0
+        self.current_program = None
+        self.current_exercise = None
         self.state = STATE_STOP
 
     def set_state_pause(self):
@@ -67,18 +69,19 @@ class TrainingDaemon:
                 continue
             if self._debug:
                 print(
-                    f"{time()} - {'RUNNING' if self.state else 'NOT RUNNING'} -[{self.current_exercise.exercice.name}] {self.current_time}/{self.current_exercise.time} -{self.current_exercise.exercice.name} - {self.current_exercise.exercice.picture_path}")
+                    f"{time()} - State: {self.state} -[{self.current_exercise.exercice.name}] {self.current_time}/{self.current_exercise.time} -{self.current_exercise.exercice.name} - {self.current_exercise.exercice.picture_path}")
             if self.state == STATE_RUNNING:
                 self.current_time += self._delay
                 if self.current_time >= self.current_exercise.time:
                     self.current_time = 0
-                    if self.current_exercise.exercise.is_both_side and self.exercice_side == 0:
+                    if self.current_exercise.exercice.is_both_side and self.exercice_side == 0:
                         self.exercice_side = 1
                     else:
                         self.current_step += 1
-                        self.set_exercice()
                     if self.current_step >= len(self.current_program.steps):
                         self.set_state_stop()
+                    else:
+                        self.set_exercice()
 
             sleep(self._delay)
 
