@@ -2,19 +2,19 @@
     "Rest": {
     },
     "Arm up": {
-        "pic": "./ExercicePic/A001.JPG",
+        "pic": "./ExercisePic/A001.JPG",
         "both_side": false
     },
     "Arm up2": {
-        "pic": "./ExercicePic/A002.JPG",
+        "pic": "./ExercisePic/A002.JPG",
         "both_side": false
     },
     "Arm behind": {
-        "pic": "./ExercicePic/A003.JPG",
+        "pic": "./ExercisePic/A003.JPG",
         "both_side": true
     },
     "Arm behind 2": {
-        "pic": "./ExercicePic/A005.JPG",
+        "pic": "./ExercisePic/A005.JPG",
         "both_side": false
     }
 }

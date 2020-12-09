@@ -10,13 +10,13 @@ class MainWindow(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.daemon = TrainingDaemon(debug=True)
+        self.daemon = TrainingDaemon(delay=1, debug=True)
         self.initUI()
         self.timer = QBasicTimer()
-        self.timer.start(100, self)
+        self.timer.start(10, self)
 
     def timerEvent(self, e):
-        picture_path = self.daemon.current_exercise.exercice.picture_path
+        picture_path = self.daemon.current_exercise.exercice.picture_path if self.daemon.current_exercise is not None else None
         if picture_path is not None:
             picture = QPixmap(picture_path)
             picture = picture.scaledToHeight(400)
