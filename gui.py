@@ -1,73 +1,71 @@
-import sys
-from trainingDaemon import TrainingDaemon
-from PyQt5.QtWidgets import (QWidget, QLabel,
-                             QComboBox, QApplication, QPushButton, QLCDNumber)
-from PyQt5.QtCore import QBasicTimer
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import (QWidget, QSlider, QLineEdit, QLabel, QPushButton, QScrollArea,QApplication,
-                             QHBoxLayout, QVBoxLayout, QMainWindow)
-from PyQt5.QtCore import Qt, QSize
 from PyQt5 import QtWidgets, uic
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import QBasicTimer
 import sys
+from trainingDaemon import  TrainingDaemon
 
-class MainWindow(QWidget):
+class MainWindow(QtWidgets.QMainWindow):
 
-    def __init__(self):
-        super().__init__()
-        self.daemon = TrainingDaemon(delay=1, debug=True)
-        self.initUI()
-        # self.timer = QBasicTimer()
-        # self.timer.start(10, self)
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+        uic.loadUi('gui.ui', self)
+        self.daemon = TrainingDaemon(delay=1, debug=True , autostart=True)
+        self._init_ui()
+        self.mainloop = QBasicTimer()
+        self.mainloop.start(10, self)
+
+    def _init_ui(self):
+        self.load_program_combo()
+        self.start_button.clicked.connect(self.start_button_act)
+        self.stop_button.clicked.connect(self.stop_button_act)
 
     def timerEvent(self, e):
-        picture_path = self.daemon.current_exercise.exercice.picture_path if self.daemon.current_exercise is not None else None
-        if picture_path is not None:
-            picture = QPixmap(picture_path)
-            picture = picture.scaledToHeight(400)
-            self.lbl.setPixmap(picture)
+        self.start_stop_button_bhv()
+        self.exercise_picture_bhv()
+
+
+    def start_stop_button_bhv(self):
+        if self.daemon.state in (1,2):
+            self.stop_button.setDisabled(False)
         else:
-            self.lbl.setText('No picture')
-        self.timer_step.display(self.daemon.current_time)
+            self.stop_button.setDisabled(True)
+        if self.daemon.state == 1:
+            self.start_button.setText('PAUSE')
+        else:
+            self.start_button.setText('START')
 
-    def initUI(self):
+    def exercise_picture_bhv(self):
+        if self.daemon.current_step is not None and self.daemon.current_step.exercise.picture_path is not None:
+                exercice_picture = QPixmap(self.daemon.current_step.exercise.picture_path)
+                exercice_picture = exercice_picture.scaled(self.picture_label.size(),aspectRatioMode=2)
+                self.picture_label.setPixmap(exercice_picture)
+        else:
+            self.picture_label.setPixmap(QPixmap())
 
-        # self.program_list = QComboBox(self)
-        # self.qbtn = QPushButton('STATE', self)
-        # self.lbl = QLabel('pic here', self)
-        # self.lbl.setGeometry(100,100, 600, 400)
-        # self.timer_step = QLCDNumber(self)
-        # self.timer_step.setGeometry(100,0, 200, 50)
-
-
-        self.scroll = QScrollArea(self)
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scroll.setWidgetResizable(True)
-
-        self.scroll_Layout = QtWidgets.QVBoxLayout(self.scroll)
-        for _ in range(12):
-            self.scroll_Layout.addWidget(QLabel('test'))
-
-        self.setGeometry(300, 300, 1000, 400)
-        self.setWindowTitle('Never A Fat Ass Again')
-        self.show()
-
-    def select_program(self, selected_program):
-        self.daemon.set_program(selected_program)
-
-    def state_button(self):
-        if not self.daemon.state:
+    def start_button_act(self):
+        if self.daemon.state != 1:
             self.daemon.set_state_running()
         else:
             self.daemon.set_state_pause()
         
+    def stop_button_act(self):
+        self.daemon.set_state_stop()
+        self.program_combo.setCurrentIndex(0)
 
+    def load_program_combo(self):
+        self.program_combo.addItem(None)
+        for key in self.daemon.program_list.keys():
+            self.program_combo.addItem(key)
+        self.program_combo.activated[str].connect(self.select_program)
+
+    def select_program(self, selected_program):
+        self.daemon.set_program(selected_program)
 
 def main():
-    app = QApplication(sys.argv)
-    ex = MainWindow()
+    app = QtWidgets.QApplication(sys.argv)
+    main = MainWindow()
+    main.show()
     sys.exit(app.exec_())
-
 
 if __name__ == '__main__':
     main()
