@@ -27,3 +27,9 @@ class Program:
         with open(pathname, 'r') as myfile:
             data = myfile.read()
         return json.loads(data)
+
+    def get_full_time(self):
+        return sum([step.time for step in self.steps])
+
+    def get_time_at_id(self,id):
+        return sum([step.time for step in self.steps[:id]])

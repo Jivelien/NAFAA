@@ -12,7 +12,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.daemon = TrainingDaemon(delay=1, debug=True , autostart=True)
         self._init_ui()
         self.mainloop = QBasicTimer()
-        self.mainloop.start(10, self)
+        self.mainloop.start(100, self)
 
     def _init_ui(self):
         self.load_program_combo()
@@ -22,7 +22,26 @@ class MainWindow(QtWidgets.QMainWindow):
     def timerEvent(self, e):
         self.start_stop_button_bhv()
         self.exercise_picture_bhv()
+        self.step_progress_bhv()
 
+        if self.daemon.current_program is not None:
+            full_time = self.daemon.current_program.get_full_time()
+            elapsed_time = self.daemon.current_program.get_time_at_id(self.daemon.current_step_id) + self.daemon.current_time
+            self.full_progress_label.setText(f"{elapsed_time}/{full_time}")
+            full_percent = int((elapsed_time/full_time)*100)
+        else:
+            self.full_progress_label.setText('')
+            full_percent = 0
+        self.full_progressbar.setValue(full_percent)
+
+    def step_progress_bhv(self):
+        if self.daemon.current_step is not None:
+            step_percent = int((self.daemon.current_time / self.daemon.current_step.time) * 100)
+            self.step_progress_label.setText(f'{self.daemon.current_time} / {self.daemon.current_step.time}')
+        else:
+            step_percent = 0
+            self.step_progress_label.setText('')
+        self.step_progressbar.setValue(step_percent)
 
     def start_stop_button_bhv(self):
         if self.daemon.state in (1,2):
