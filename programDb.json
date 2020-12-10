@@ -5,80 +5,40 @@
             "time": 10
         },
         {
-            "exercise": "Rest",
-            "time": 5
-        },
-        {
             "exercise": "Arm behind",
             "time": 10
-        },
-        {
-            "exercise": "Rest",
-            "time": 5
         },
         {
             "exercise": "Arm behind 2",
             "time": 10
         },
         {
-            "exercise": "Rest",
-            "time": 5
-        },
-        {
             "exercise": "Arm up side strech",
             "time": 10
-        },
-        {
-            "exercise": "Rest",
-            "time": 5
         },
         {
             "exercise": "Arm up side strech sit",
             "time": 10
         },
         {
-            "exercise": "Rest",
-            "time": 5
-        },
-        {
             "exercise": "Plank",
             "time": 10
-        },
-        {
-            "exercise": "Rest",
-            "time": 5
         },
         {
             "exercise": "Neck",
             "time": 10
         },
         {
-            "exercise": "Rest",
-            "time": 5
-        },
-        {
             "exercise": "Arm behind 3",
             "time": 10
-        },
-        {
-            "exercise": "Rest",
-            "time": 5
         },
         {
             "exercise": "Back",
             "time": 10
         },
         {
-            "exercise": "Rest",
-            "time": 5
-        },
-        {
             "exercise": "Wirst on ground",
             "time": 10
-        },
-        {
-            "exercise": "Rest",
-            "time": 5
         },
         {
             "exercise": "Wirst sit",

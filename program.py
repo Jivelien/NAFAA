@@ -3,11 +3,14 @@ import json
 
 
 class Program:
-    def __init__(self,  program_definition):
+    def __init__(self,  program_definition, rest_time = 10):
         self.exercise_list = self._read_json_db('exerciseDb.json')
+        self.rest_time = rest_time
         self.steps = []
 
         for step in program_definition:
+            self.steps.append(self.Step('Rest', self.exercise_list.get('Rest'), self.rest_time ))
+
             exercise_name = step.get('exercise')
             exercise_definititon = self.exercise_list.get(exercise_name)
             time_step = step.get('time')
@@ -15,7 +18,6 @@ class Program:
             self.steps.append(self.Step(exercise_name, exercise_definititon, time_step))
             
     #TODO : Si dans les deux sens : créer 2 steps
-    #TODO : changez la gestion des temps de repos
 
     class Step:
         def __init__(self, exercise_name, exercise_definition, time):
