@@ -13,7 +13,7 @@ class Program:
             time_step = step.get('time')
 
             self.steps.append(self.Step(exercise_name, exercise_definititon, time_step))
-
+            
     #TODO : Si dans les deux sens : créer 2 steps
     #TODO : changez la gestion des temps de repos
 
@@ -31,7 +31,7 @@ class Program:
         return json.loads(data)
 
     def get_full_time(self):
-        return sum([step.time for step in self.steps])
+        return sum([step.time * (step.exercise.is_both_side + 1) for step in self.steps])
 
     def get_time_at_id(self,id):
-        return sum([step.time for step in self.steps[:id]])
+        return sum([step.time * (step.exercise.is_both_side + 1) for step in self.steps[:id]])

@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QLabel
 from PyQt5.QtCore import QBasicTimer
 import sys
 from trainingDaemon import  TrainingDaemon
@@ -23,16 +24,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.start_stop_button_bhv()
         self.exercise_picture_bhv()
         self.step_progress_bhv()
+        self.full_progress_bhv()
 
+
+        for i in reversed(range(self.verticalLayout.count())): 
+            self.verticalLayout.itemAt(i).widget().setParent(None)
         if self.daemon.current_program is not None:
-            full_time = self.daemon.current_program.get_full_time()
-            elapsed_time = self.daemon.current_program.get_time_at_id(self.daemon.current_step_id) + self.daemon.current_time
-            self.full_progress_label.setText(f"{elapsed_time}/{full_time}")
-            full_percent = int((elapsed_time/full_time)*100)
-        else:
-            self.full_progress_label.setText('')
-            full_percent = 0
-        self.full_progressbar.setValue(full_percent)
+            for step in self.daemon.current_program.steps[self.daemon.current_step_id+1:]:
+                picture_path = step.exercise.picture_path
+                if picture_path is not None:
+                    picture = QPixmap(picture_path)
+                    picture = picture.scaledToHeight(100)
+                    
+                    container = QLabel(self.scrollAreaWidgetContents)
+                    container.setPixmap(picture)
+                    self.verticalLayout.addWidget(container)
 
     def step_progress_bhv(self):
         if self.daemon.current_step is not None:
@@ -42,6 +48,19 @@ class MainWindow(QtWidgets.QMainWindow):
             step_percent = 0
             self.step_progress_label.setText('')
         self.step_progressbar.setValue(step_percent)
+
+    def full_progress_bhv(self):
+        if self.daemon.current_program is not None:
+            full_time = self.daemon.current_program.get_full_time()
+            elapsed_time = self.daemon.current_program.get_time_at_id(self.daemon.current_step_id) + self.daemon.current_time
+            if self.daemon.exercise_side:
+                elapsed_time += self.daemon.current_step.time
+            self.full_progress_label.setText(f"{elapsed_time}/{full_time}")
+            full_percent = int((elapsed_time/full_time)*100)
+        else:
+            self.full_progress_label.setText('')
+            full_percent = 0
+        self.full_progressbar.setValue(full_percent)
 
     def start_stop_button_bhv(self):
         if self.daemon.state in (1,2):
