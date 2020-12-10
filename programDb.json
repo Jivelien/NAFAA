@@ -83,6 +83,60 @@
         {
             "exercise": "Wirst sit",
             "time": 10
+        }],
+    "Stretch middle body":[
+        {
+        "exercise": "Strech leg couch",
+        "time": 10
+        },
+        {
+        "exercise": "Strech leg sit",
+        "time": 10
+        },
+        {
+        "exercise": "Strech leg sit2",
+        "time": 10
+        },
+        {
+        "exercise": "Strech leg stand",
+        "time": 10
+        },
+        {
+        "exercise": "Strech cross leg sit",
+        "time": 10
+        },
+        {
+        "exercise": "Foetus",
+        "time": 10
+        },
+        {
+        "exercise": "Knee on ground",
+        "time": 10
+        },
+        {
+        "exercise": "Front gap",
+        "time": 10
+        },
+        {
+        "exercise": "Couch leg",
+        "time": 10
+        },
+        {
+        "exercise": "Side gap",
+        "time": 10
+        },
+        {
+        "exercise": "Sit and bow",
+        "time": 10
+        },
+        {
+        "exercise": "Sit on ground and strech",
+        "time": 10
+        },
+        {
+        "exercise": "Couch and side",
+        "time": 10
         }
     ]
+    
 }

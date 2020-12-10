@@ -60,5 +60,61 @@
     "Wirst sit": {
         "pic": "./ExercisePic/A020.JPG",
         "both_side": true
+    },
+    "Strech leg couch": {
+        "pic": "./ExercisePic/B001.JPG",
+        "both_side": true
+    },
+    "Strech leg sit": {
+        "pic": "./ExercisePic/B003.JPG",
+        "both_side": true
+    },
+    "Strech leg sit2": {
+        "pic": "./ExercisePic/B005.JPG",
+        "both_side": true
+    },
+    "Strech leg stand": {
+        "pic": "./ExercisePic/B007.JPG",
+        "both_side": false
+    },
+    "Strech cross leg sit": {
+        "pic": "./ExercisePic/B008.JPG",
+        "both_side": true
+    },
+    "Foetus": {
+        "pic": "./ExercisePic/B010.JPG",
+        "both_side": false
+    },
+    "Knee on ground": {
+        "pic": "./ExercisePic/B011.JPG",
+        "both_side": true
+    },
+    "Front gap": {
+        "pic": "./ExercisePic/B013.JPG",
+        "both_side": true
+    },
+    "Couch leg": {
+        "pic": "./ExercisePic/B015.JPG",
+        "both_side": true
+    },
+    "Side gap": {
+        "pic": "./ExercisePic/B016.JPG",
+        "both_side": true
+    },
+    "Sit and bow": {
+        "pic": "./ExercisePic/B017.JPG",
+        "both_side": false
+    },
+    "Sit on ground and strech": {
+        "pic": "./ExercisePic/B018.JPG",
+        "both_side": true
+    },
+    "Dog": {
+        "pic": "./ExercisePic/B020.JPG",
+        "both_side": false
+    },
+    "Couch and side": {
+        "pic": "./ExercisePic/B021.JPG",
+        "both_side": true
     }
 }
