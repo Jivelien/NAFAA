@@ -57,7 +57,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.daemon.current_program is not None:
             full_time = self.daemon.current_program.get_full_time()
             elapsed_time = self.daemon.current_program.get_time_at_id(self.daemon.current_step_id) + self.daemon.current_time
-            self.full_progress_label.setText(f"{elapsed_time}/{full_time}")
+            self.full_progress_label.setText(f"{(elapsed_time//60):0>2}:{(elapsed_time%60):0>2}/{(full_time//60):0>2}:{(full_time%60):0>2}")
             full_percent = int((elapsed_time/full_time)*100)
         else:
             self.full_progress_label.setText('')
