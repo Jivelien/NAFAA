@@ -29,7 +29,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def next_step_bhv(self):
         for i in reversed(range(self.verticalLayout.count())): 
-            self.verticalLayout.removeItem(self.verticalLayout.itemAt(i))
+            if self.verticalLayout.itemAt(i).widget() is not None:
+                self.verticalLayout.itemAt(i).widget().deleteLater()
+            else:
+                self.verticalLayout.removeItem(self.verticalLayout.itemAt(i))
         if self.daemon.current_program is not None:
             for step in self.daemon.current_program.steps[self.daemon.current_step_id+1:]:
                 picture_path = step.exercise.picture_path
