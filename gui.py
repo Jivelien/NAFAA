@@ -57,8 +57,6 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.daemon.current_program is not None:
             full_time = self.daemon.current_program.get_full_time()
             elapsed_time = self.daemon.current_program.get_time_at_id(self.daemon.current_step_id) + self.daemon.current_time
-            if self.daemon.exercise_side:
-                elapsed_time += self.daemon.current_step.time
             self.full_progress_label.setText(f"{elapsed_time}/{full_time}")
             full_percent = int((elapsed_time/full_time)*100)
         else:
@@ -69,8 +67,10 @@ class MainWindow(QtWidgets.QMainWindow):
     def start_stop_button_bhv(self):
         if self.daemon.state in (1,2):
             self.stop_button.setDisabled(False)
+            self.program_combo.setDisabled(True)
         else:
             self.stop_button.setDisabled(True)
+            self.program_combo.setDisabled(False)
         if self.daemon.state == 1:
             self.start_button.setText('PAUSE')
         else:

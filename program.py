@@ -3,21 +3,25 @@ import json
 
 
 class Program:
-    def __init__(self,  program_definition, rest_time = 10):
+    def __init__(self,  program_definition, rest_time = 5):
         self.exercise_list = self._read_json_db('exerciseDb.json')
         self.rest_time = rest_time
         self.steps = []
 
         for step in program_definition:
-            self.steps.append(self.Step('Rest', self.exercise_list.get('Rest'), self.rest_time ))
 
             exercise_name = step.get('exercise')
             exercise_definititon = self.exercise_list.get(exercise_name)
             time_step = step.get('time')
 
+            is_both_side = exercise_definititon.get('both_side')
+
+            self.steps.append(self.Step('Rest', self.exercise_list.get('Rest'), self.rest_time ))
             self.steps.append(self.Step(exercise_name, exercise_definititon, time_step))
+            if is_both_side:
+                self.steps.append(self.Step('Rest', self.exercise_list.get('Rest'), self.rest_time ))
+                self.steps.append(self.Step(exercise_name, exercise_definititon, time_step))
             
-    #TODO : Si dans les deux sens : créer 2 steps
 
     class Step:
         def __init__(self, exercise_name, exercise_definition, time):
@@ -33,7 +37,7 @@ class Program:
         return json.loads(data)
 
     def get_full_time(self):
-        return sum([step.time * (step.exercise.is_both_side + 1) for step in self.steps])
+        return sum([step.time for step in self.steps])
 
     def get_time_at_id(self,id):
-        return sum([step.time * (step.exercise.is_both_side + 1) for step in self.steps[:id]])
+        return sum([step.time for step in self.steps[:id]])

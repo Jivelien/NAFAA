@@ -22,7 +22,6 @@ class TrainingDaemon:
         self.current_step = None
         self.current_step_id = 0
         self.current_time = 0
-        self.exercise_side = 0
 
         if autostart:self.start() 
 
@@ -31,7 +30,6 @@ class TrainingDaemon:
         self.current_program = Program(program_definition) if program_definition is not None else None
         self.current_step_id = 0
         self.current_time = 0
-        self.exercise_side = 0
         self.state = STATE_STOP
         if self.current_program is not None:
             self.set_exercise()
@@ -44,7 +42,6 @@ class TrainingDaemon:
     def set_state_stop(self):
         self.current_step_id = 0
         self.current_time = 0
-        self.exercise_side = 0
         self.current_program = None
         self.current_step = None
         self.state = STATE_STOP
@@ -77,10 +74,7 @@ class TrainingDaemon:
                 self.current_time += self._delay
                 if self.current_time >= self.current_step.time:
                     self.current_time = 0
-                    if self.current_step.exercise.is_both_side and self.exercise_side == 0:
-                        self.exercise_side = 1
-                    else:
-                        self.current_step_id += 1
+                    self.current_step_id += 1
                     if self.current_step_id >= len(self.current_program.steps):
                         self.set_state_stop()
                     else:
