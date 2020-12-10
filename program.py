@@ -14,6 +14,8 @@ class Program:
 
             self.steps.append(self.Step(exercise_name, exercise_definititon, time_step))
 
+    #TODO : Si dans les deux sens : créer 2 steps
+    #TODO : changez la gestion des temps de repos
 
     class Step:
         def __init__(self, exercise_name, exercise_definition, time):
