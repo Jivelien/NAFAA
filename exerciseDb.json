@@ -16,5 +16,49 @@
     "Arm behind 2": {
         "pic": "./ExercisePic/A005.JPG",
         "both_side": false
+    },
+    "Bar strech": {
+        "pic": "./ExercisePic/A006.JPG",
+        "both_side": false
+    },
+    "Bar strech2": {
+        "pic": "./ExercisePic/A007.JPG",
+        "both_side": false
+    },
+    "Arm up side strech": {
+        "pic": "./ExercisePic/A008.JPG",
+        "both_side": true
+    },
+    "Arm up side strech sit": {
+        "pic": "./ExercisePic/A010.JPG",
+        "both_side": true
+    },
+    "Plank": {
+        "pic": "./ExercisePic/A012.JPG",
+        "both_side": false
+    },
+    "Neck": {
+        "pic": "./ExercisePic/A013.JPG",
+        "both_side": true
+    },
+    "Neck 2": {
+        "pic": "./ExercisePic/A015.JPG",
+        "both_side": false
+    },
+    "Arm behind 3": {
+        "pic": "./ExercisePic/A016.JPG",
+        "both_side": false
+    },
+    "Back": {
+        "pic": "./ExercisePic/A017.JPG",
+        "both_side": true
+    },
+    "Wirst on ground": {
+        "pic": "./ExercisePic/A019.JPG",
+        "both_side": false
+    },
+    "Wirst sit": {
+        "pic": "./ExercisePic/A020.JPG",
+        "both_side": true
     }
 }
