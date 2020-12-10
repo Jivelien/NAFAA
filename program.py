@@ -16,10 +16,10 @@ class Program:
 
 
     class Step:
-        def __init__(self, exercice_name, exercice_definition, time):
-            self.exercice = Exercise(name = exercice_name,
-                                    picture_path = exercice_definition.get('pic'),
-                                    is_both_side = exercice_definition.get('both_side')
+        def __init__(self, exercise_name, exercise_definition, time):
+            self.exercise = Exercise(name = exercise_name,
+                                    picture_path = exercise_definition.get('pic'),
+                                    is_both_side = exercise_definition.get('both_side')
                                     )
             self.time = time
 
