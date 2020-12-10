@@ -2,101 +2,101 @@
     "Strech upper body": [
         {
             "exercise": "Arm up",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Arm behind",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Arm behind 2",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Arm up side strech",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Arm up side strech sit",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Plank",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Neck",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Arm behind 3",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Back",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Wirst on ground",
-            "time": 10
+            "time": 30
         },
         {
             "exercise": "Wirst sit",
-            "time": 10
+            "time": 30
         }
     ],
     "Stretch middle body":[
         {
         "exercise": "Strech leg couch",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Strech leg sit",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Strech leg sit2",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Strech leg stand",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Strech cross leg sit",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Foetus",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Knee on ground",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Front gap",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Couch leg",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Side gap",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Sit and bow",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Sit on ground and strech",
-        "time": 10
+        "time": 30
         },
         {
         "exercise": "Couch and side",
-        "time": 10
+        "time": 30
         }
     ]
     
