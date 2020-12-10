@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, QVBoxLayout
 from PyQt5.QtCore import QBasicTimer
 import sys
 from trainingDaemon import  TrainingDaemon
@@ -25,20 +25,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.exercise_picture_bhv()
         self.step_progress_bhv()
         self.full_progress_bhv()
+        self.next_step_bhv()
 
-
+    def next_step_bhv(self):
         for i in reversed(range(self.verticalLayout.count())): 
-            self.verticalLayout.itemAt(i).widget().setParent(None)
+            self.verticalLayout.removeItem(self.verticalLayout.itemAt(i))
         if self.daemon.current_program is not None:
             for step in self.daemon.current_program.steps[self.daemon.current_step_id+1:]:
                 picture_path = step.exercise.picture_path
                 if picture_path is not None:
                     picture = QPixmap(picture_path)
                     picture = picture.scaledToHeight(100)
-                    
                     container = QLabel(self.scrollAreaWidgetContents)
                     container.setPixmap(picture)
                     self.verticalLayout.addWidget(container)
+        self.verticalLayout.addStretch()
 
     def step_progress_bhv(self):
         if self.daemon.current_step is not None:
