@@ -157,7 +157,7 @@
     <property name="font">
      <font>
       <family>Ubuntu</family>
-      <pointsize>25</pointsize>
+      <pointsize>20</pointsize>
       <weight>75</weight>
       <bold>true</bold>
       <kerning>true</kerning>

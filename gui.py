@@ -47,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def step_progress_bhv(self):
         if self.daemon.current_step is not None:
             step_percent = int((self.daemon.current_time / self.daemon.current_step.time) * 100)
-            self.step_progress_label.setText(f'{self.daemon.current_time} / {self.daemon.current_step.time}')
+            self.step_progress_label.setText(f'{(self.daemon.current_time):0>2} / {(self.daemon.current_step.time):0>2}')
         else:
             step_percent = 0
             self.step_progress_label.setText('')
