@@ -60,28 +60,30 @@ class TrainingDaemon:
             data = myfile.read()
         return json.loads(data)
 
+    def next_step(self):
+        if self.current_program is None:
+            sleep(self._delay)
+            if self._debug:
+                print(f"{time()} - No programm")
+            return
+        if self._debug:
+            print(
+                f"{time()} - State: {self.state} -[{self.current_step.exercise.name}] {self.current_time}/{self.current_step.time} -{self.current_step.exercise.name} - {self.current_step.exercise.picture_path}")
+        if self.state == STATE_RUNNING:
+            self.current_time += self._delay
+            if self.current_time >= self.current_step.time:
+                self.current_time = 0
+                self.current_step_id += 1
+                if self.current_step_id >= len(self.current_program.steps):
+                    self.set_state_stop()
+                else:
+                    self.set_exercise()
+
     def run(self):
         while True:
-            if self.current_program is None:
-                sleep(self._delay)
-                if self._debug:
-                    print(f"{time()} - No programm")
-                continue
-            if self._debug:
-                print(
-                    f"{time()} - State: {self.state} -[{self.current_step.exercise.name}] {self.current_time}/{self.current_step.time} -{self.current_step.exercise.name} - {self.current_step.exercise.picture_path}")
-            if self.state == STATE_RUNNING:
-                self.current_time += self._delay
-                if self.current_time >= self.current_step.time:
-                    self.current_time = 0
-                    self.current_step_id += 1
-                    if self.current_step_id >= len(self.current_program.steps):
-                        self.set_state_stop()
-                    else:
-                        self.set_exercise()
-
+            self.next_step()
             sleep(self._delay)
 
-    def start(self):
+    def start(self): #TODO rename it in StartDaemon
         self._thread = threading.Thread(target=self.run, daemon=True)
         self._thread.start()
